@@ -12,6 +12,19 @@ const schema = a.schema({
       content: a.string(),
     })
     .authorization((allow) => [allow.publicApiKey()]),
+  BatchPutTodos: a
+    .mutation()
+    .arguments({
+      encounters: a.json().array(),
+    })
+    .returns(a.ref("Todo").array())
+    .handler(
+      a.handler.custom({
+        dataSource: a.ref("Todo"),
+        entry: "./BatchPutTodo.js",
+      })
+    )
+    .authorization((allow) => [allow.authenticated()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
